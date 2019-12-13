@@ -123,7 +123,3 @@ case "$functionalityName" in
   ;;
 esac
 #functionality end
-
-#I'm really sick with arguments management.
-#Do you know how could I add --help argument instead of -h?
-#Also, I don't like how arguments managed here at all.
