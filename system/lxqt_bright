@@ -1,0 +1,19 @@
+#!/bin/bash
+increase=0
+
+for arg in "$@"; do
+  case "$arg" in
+    +)increase=1
+    ;;
+    -)increase=-1
+    ;;
+    [0-9])increase*=$arg
+    ;;
+  esac
+done
+
+if [ "$increase" -ge 1 ]; then
+  lxqt-backlight_backend.sh --inc $increase
+elif [ "$increase" -le -1 ]; then
+  lxqt-backlight_backend.sh --dec $increase
+fi
