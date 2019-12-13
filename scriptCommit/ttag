@@ -1,54 +1,50 @@
-#!/bin/sh
-set -e
-#Don't know whatTypeOfNames you_are_using, butILikeThisOne.
-#I want to know how to done these all arguments checks better in bash.
-#And if you know how, I'll be really gratefull for this information,
+#!/bin/bash
+set -eE
 
 functionalityName=""
 repository="bgoncharuck"
 tag=""
 helpCalled=0
 helpExitCode=0
-#Thought about "stage" variable in case of more stages needed, but let it be "isDevelopment"
 isDevelopment=0
 
 #repeating fragments of code
 function someSortOfThrow() {
   # if error code is 2, show help (2 is incorrect arguments code)
-  # $1 is error message
-  # $2 is error code
-  echo -e $1
-  if [ $2 -ne 2 ] ; then
-    exit $2; fi
-  helpExitCode=$2
+  # "$1" is error message
+  # "$2" is error code
+  echo -e "$1"
+  if [ "$2" -ne 2 ] ; then
+    exit "$2"; fi
+  helpExitCode="$2"
   helpCalled=1
 }
 function argumentPush() {
   if ! [[ "$1" =~ ^(production|development)$ ]] ; then
     someSortOfThrow "Invalid stage name \"${1}\"." 2; fi
 
-  functionalityName=$2
-  tag=$3
-  isDevelopment=$([[ $1 == "development" ]] && echo 1 || echo 0)
+  functionalityName="$2"
+  tag="$3"
+  isDevelopment=$([[ "$1" = "development" ]] && echo 1 || echo 0)
 }
 function argumentGetAndGetBuildType() {
-  if [ $1 -gt 1 ] ; then
+  if [ "$1" -gt 1 ] ; then
     someSortOfThrow "Invalid number of arguments." 2; fi
-  functionalityName=$2
+  functionalityName="$2"
 }
 
 #arguments parser
-if [ "$1" == "-h" ] && [ $# -gt 1 ] || [ "$1" == "-r" ] && [ $# -lt 3 ] || [ $# -lt 1 ]  ; then
+if [ "$1" = "-h" ] && [ $# -gt 1 ] || [ "$1" = "-r" ] && [ $# -lt 3 ] || [ $# -lt 1 ]  ; then
   someSortOfThrow "Invalid number of arguments." 2
 
 elif ! [[ "$1" =~ ^(push|get|get-build-type|-h|-r)$ ]] ; then
   someSortOfThrow "Invalid first argument \"${1}\"." 2
-elif [ "$1" == "-r" ] && ! [[ "$3" =~ ^(push|get|get-build-type)$ ]] ; then
+elif [ "$1" = "-r" ] && ! [[ "$3" =~ ^(push|get|get-build-type)$ ]] ; then
   someSortOfThrow "Invalid third argument \"${3}\"." 2
 
-elif [ "$1" == "push" ] ; then
+elif [ "$1" = "push" ] ; then
   argumentPush "${3}" "${1}" "${2}"
-elif [ "$3" == "push" ] ; then
+elif [ "$3" = "push" ] ; then
   argumentPush "${5}" "${3}" "${4}"
 
 elif [[ "$1" =~ ^(get|get-build-type)$ ]] ; then
@@ -76,13 +72,13 @@ if [ $helpCalled -ne 0 ]; then
   echo "Options:"
   echo -e "tagthetag2 -r [repository] [function]          \t- change default repository name"
   echo -e "tagthetag2 -h                                  \t- prints help"
-  exit $helpExitCode
+  exit "$helpExitCode"
 fi
 
 #only now "git tag" is called and called once
 gittag="$(git tag --points-at HEAD)"
 
-tagCount=$(echo $gittag | \
+tagCount=$(echo "$gittag" | \
 #git tag output somehow similar to xargs when used here.
 #So we need to switch it to lines.
 awk '{NF++;while(NF-->1)print $NF}' | \
@@ -90,38 +86,38 @@ awk '{NF++;while(NF-->1)print $NF}' | \
 #So we need awk again, to skip these blank lines first.
 awk 'NF > 0'| wc -l)
 
-case $functionalityName in
+case "$functionalityName" in
 
   push)
-    if [ $tagCount -gt 0 ] ; then
+    if [ "$tagCount" -gt 0 ] ; then
       someSortOfThrow "You already got tags on your current HEAD.\nYou can use\
       \"git tag --points-at HEAD\" to find out and \"git tag -d [TAG]\" to remove it." 1
     fi
 
     tag="${repository}/${tag}"
-    if [ $isDevelopment -eq 1 ] ; then tag+="suffix"; fi
-    git tag $tag
+    if [ "$isDevelopment" -eq 1 ] ; then tag+="suffix"; fi
+    git tag "$tag"
   ;;
 
   get|get-build-type)
-    if [ $tagCount -eq 0 ] ; then
+    if [ "$tagCount" -eq 0 ] ; then
       #is it really an error? I don't sure.
       someSortOfThrow "There is no tags on current HEAD." 1
-    elif [ $tagCount -gt 1 ] ; then
+    elif [ "$tagCount" -gt 1 ] ; then
       someSortOfThrow "There are more than one tag on current HEAD." 1
-    elif [[ -z "$(echo $gittag | grep $repository)" ]] ; then
+    elif [[ "$(echo "$gittag" | grep -q "$repository")" ]] ; then
       someSortOfThrow "Incorect repository name." 2
     fi
 
 
-    if [ $functionalityName == "get" ] ; then
-      echo $gittag | tr -d '/,[:alpha:]'
+    if [ "$functionalityName" = "get" ] ; then
+      echo "$gittag" | tr -d '/,[:alpha:]'
       exit 0
     fi
 
-    if [ $functionalityName == "get-build-type" ] ; then
+    if [ "$functionalityName" = "get-build-type" ] ; then
       # @TODO More stages can be added here, if needed
-      echo $([[ $gittag =~ "suffix" ]] && echo development || echo production)
+      if [[ "$gittag" =~ "suffix" ]]; then echo development; else echo production; fi
       exit 0
     fi
   ;;
