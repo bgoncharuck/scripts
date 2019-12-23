@@ -1,0 +1,5 @@
+#!/bin/bash
+cd ~
+curl -s https://get.sdkman.io | bash
+sync
+sdk install kotlin
