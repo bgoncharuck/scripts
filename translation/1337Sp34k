@@ -9,16 +9,7 @@ tranlate()
 {
   if [ "${#2}" -ne "${#3}" ]; then return 1; fi
 
-  IFS='' read -ra fromArray <<< "$2"
-  IFS='' read -ra toArray <<< "$3"
-
-  result="$1"
-  for curIndex in "${fromArray[@]}"
-  do
-    result="$(echo "$result" | tr "${fromArray[curIndex]}" "${toArray[curIndex]}")"
-  done
-
-  echo "$result"
+  echo "$1" | tr "$2" "$3"
 }
 
 if [ "$#" -lt 2 ] || ! [[ "$1" =~ ^(-f|-t)$ ]]; then help; exit 2; fi
