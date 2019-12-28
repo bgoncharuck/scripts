@@ -80,13 +80,11 @@ fi
 
 if [ "$spacesInFrom" -eq 0 ] && [ "$spacesInTo" -eq 0 ]; then
   if [ "${#1}" -ne "${#2}" ]; then
-    help
     exit 1
   fi
   delimeter=""
 else
   if [ "$spacesInTo" -ne "$spacesInFrom" ]; then
-    help
     exit 2
   fi
 fi
