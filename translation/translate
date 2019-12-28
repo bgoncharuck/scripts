@@ -9,8 +9,30 @@ help()
   echo -e "translate \"symbols symbols c\" \"a symbols lol\" \"text\""
 }
 
+translate()
+{
+  IFS='' read -ra fromArray <<< "$1"
+  IFS='' read -ra toArray <<< "$2"
+
+
+  result="$3"
+  if [[ "$delimeter" != "/" ]]; then
+    for curIndex in "${fromArray[@]}"
+    do
+      result="$(echo "$result" | sed -e "s/${fromArray[curIndex]}/${toArray[curIndex]}/g")"
+    done
+  else
+    for curIndex in "${fromArray[@]}"
+    do
+      result="$(echo "$result" | sed -e "s:${fromArray[curIndex]}:${toArray[curIndex]}:g")"
+    done
+  fi
+
+  echo "$result"
+}
+
 #arguments
-if ! [[ "$#" =~ ^[1,2,4]$ ]]; then
+if ! [[ "$#" =~ ^[1,3,5]$ ]]; then
   help
   exit 2
 fi
@@ -37,7 +59,7 @@ do
   case "${!curArgIndex+1}" in
     -d)
       if [[ "$curArgIndex" -eq 0 ]]; then
-      curArgIndex=$((curArgIndex+2)); else
+      break; else
       help
       exit 2
       fi
@@ -69,4 +91,10 @@ else
     exit 2
   fi
 fi
+
 #translation
+if [ "$delimeterUsed" = false ]; then
+  tranlate "$1" "$2" "$3"
+else
+  tranlate "$3" "$4" "$5"
+fi
