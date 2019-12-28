@@ -4,31 +4,50 @@ help()
   echo -e "translate \"abc\" \"klf\" \"text\""
   echo ""
   echo -e "translate \"a b c\" \"symbols symbols symbols\" \"text\""
-  echo -e "translate -d ":" \"a:b:c\" \"symbols:symbols:symbols\" \"text\""
+  echo -e "translate -d \":\" \"a:b:c\" \"symbols:symbols:symbols\" \"text\""
   echo ""
   echo -e "translate \"symbols symbols c\" \"a symbols lol\" \"text\""
 }
 
+#arguments
+if ! [[ "$#" =~ ^[1,2,4]$ ]]; then
+  help
+  exit 2
+fi
+
 delimeterUsed=false
 delimeter=" "
-arguments=$@
+arguments=("$@")
 
-for curArgIndex in "${arguments[@]}"
+while getopts h?d: option
+do
+  case "${option}" in
+    h)
+    help
+    exit 0
+    ;;
+    d)
+    delimeterUsed=true
+    delimeter=${OPTARG}
+    ;;
+  esac
+done
+
+for curArgIndex in $(seq $#)
 do
   case "${arguments[curArgIndex]}" in
-    -h)
-      help()
-      exit 0
-    ;;
     -d)
-      delimeterUsed=true
-      curArgIndex=$((curArgIndex+1))
-      delimeter="${arguments[curArgIndex]}"
-      curArgIndex=$((curArgIndex+1))
+      if [[ "$curArgIndex" -eq 0 ]]; then
+      curArgIndex=$((curArgIndex+2)); else
+      help
+      exit 2
+      fi
     ;;
     -*)
-      help()
+      help
       exit 2
     ;;
   esac
 done
+
+#translation
