@@ -17,7 +17,6 @@ fi
 
 delimeterUsed=false
 delimeter=" "
-arguments=("$@")
 
 while getopts h?d: option
 do
@@ -35,7 +34,7 @@ done
 
 for curArgIndex in $(seq $#)
 do
-  case "${arguments[curArgIndex]}" in
+  case "${!curArgIndex+1}" in
     -d)
       if [[ "$curArgIndex" -eq 0 ]]; then
       curArgIndex=$((curArgIndex+2)); else
