@@ -50,4 +50,24 @@ do
   esac
 done
 
+if [ "$delimeterUsed" = false ]; then
+  spacesInFrom="$(echo "$1" | grep -o ' ' | wc -l )"
+  spacesInTo="$(echo "$2" | grep -o ' ' | wc -l )"
+else
+  spacesInFrom=`echo "${3}" | awk -F"${delimeter}" '{print NF-1}'`
+  spacesInTo=`echo "${4}" | awk -F"${delimeter}" '{print NF-1}'`
+fi
+
+if [ "$spacesInFrom" -eq 0 ] && [ "$spacesInTo" -eq 0 ]; then
+  if [ "${#1}" -ne "${#2}" ]; then
+    help
+    exit 1
+  fi
+  delimeter=""
+else
+  if [ "$spacesInTo" -ne "$spacesInFrom" ]; then
+    help
+    exit 2
+  fi
+fi
 #translation
