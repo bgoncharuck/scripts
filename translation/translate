@@ -11,20 +11,19 @@ help()
 
 translate()
 {
-  IFS='' read -ra fromArray <<< "$1"
-  IFS='' read -ra toArray <<< "$2"
-
+  IFS="$delimeter" read -ra fromArray <<< "$1"
+  IFS="$delimeter" read -ra toArray <<< "$2"
 
   result="$3"
   if [[ "$delimeter" != "/" ]]; then
-    for curIndex in "${fromArray[@]}"
+    for curIndex in $(seq "${#fromArray[@]}")
     do
-      result="$(echo "$result" | sed -e "s/${fromArray[curIndex]}/${toArray[curIndex]}/g")"
+      result="${result//${fromArray[curIndex-1]}/${toArray[curIndex-1]}}"
     done
   else
-    for curIndex in "${fromArray[@]}"
+    for curIndex in $(seq "${#fromArray[@]}")
     do
-      result="$(echo "$result" | sed -e "s:${fromArray[curIndex]}:${toArray[curIndex]}:g")"
+      result="$(echo "$result" | sed -e "s:${fromArray[curIndex-1]}:${toArray[curIndex-1]}:g")"
     done
   fi
 
@@ -75,8 +74,8 @@ if [ "$delimeterUsed" = false ]; then
   spacesInFrom="$(echo "$1" | grep -o ' ' | wc -l )"
   spacesInTo="$(echo "$2" | grep -o ' ' | wc -l )"
 else
-  spacesInFrom=`echo "${3}" | awk -F"${delimeter}" '{print NF-1}'`
-  spacesInTo=`echo "${4}" | awk -F"${delimeter}" '{print NF-1}'`
+  spacesInFrom="$(echo "${3}" | awk -F"${delimeter}" '{print NF-1}')"
+  spacesInTo="$(echo "${4}" | awk -F"${delimeter}" '{print NF-1}')"
 fi
 
 if [ "$spacesInFrom" -eq 0 ] && [ "$spacesInTo" -eq 0 ]; then
@@ -94,7 +93,7 @@ fi
 
 #translation
 if [ "$delimeterUsed" = false ]; then
-  tranlate "$1" "$2" "$3"
+  translate "$1" "$2" "$3"
 else
-  tranlate "$3" "$4" "$5"
+  translate "$3" "$4" "$5"
 fi
