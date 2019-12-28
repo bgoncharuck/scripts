@@ -15,7 +15,9 @@ translate()
   IFS="$delimeter" read -ra toArray <<< "$2"
 
   result="$3"
-  if [[ "$delimeter" != "/" ]]; then
+  if [[ "$delimeter" = "" ]]; then
+    result="$(echo "$result" | tr "${fromArray[curIndex]}" "${toArray[curIndex]}")"
+  elif [[ "$delimeter" != "/" ]]; then
     for curIndex in $(seq "${#fromArray[@]}")
     do
       result="${result//${fromArray[curIndex-1]}/${toArray[curIndex-1]}}"
