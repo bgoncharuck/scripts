@@ -13,24 +13,21 @@ translate()
 {
   result="$3"
 
-  if [[ "$delimeter" != "/" ]]; then
-    if [[ $delimeter != "" ]]; then
-      IFS="$delimeter" read -ra fromArray <<< "$1"
-      IFS="$delimeter" read -ra toArray <<< "$2"
-    else
-      fromArray=($(echo "$1"|sed  's/\(.\)/\1 /g'))
-      toArray=($(echo "$2"|sed  's/\(.\)/\1 /g'))
-    fi
-    for curIndex in $(seq "${#fromArray[@]}")
-    do
-      result="${result//${fromArray[curIndex-1]}/${toArray[curIndex-1]}}"
-    done
-  else
-    for curIndex in $(seq "${#fromArray[@]}")
-    do
-      result="$(echo "$result" | sed -e "s:${fromArray[curIndex-1]}:${toArray[curIndex-1]}:g")"
-    done
-  fi
+  case "$delimeter" in
+    "")mapfile -t fromArray < <(echo "$1"| grep -o .)
+    mapfile -t toArray < <(echo "$2"| grep -o .);;
+    *)IFS="$delimeter" read -ra fromArray <<< "$1"
+    IFS="$delimeter" read -ra toArray <<< "$2";;
+  esac
+
+  case "$delimeter" in
+    "/") for ((curIndex=0;curIndex<"${#fromArray[@]}";curIndex++)); do
+      result="$(echo "$result" | sed -e "s:${fromArray[curIndex]}:${toArray[curIndex]}:g")"
+    done;;
+    *) for ((curIndex=0;curIndex<"${#fromArray[@]}";curIndex++)); do
+      result="${result//${fromArray[curIndex]}/${toArray[curIndex]}}"
+    done;;
+  esac
 
   echo "$result"
 }
@@ -44,8 +41,7 @@ fi
 delimeterUsed=false
 delimeter=" "
 
-while getopts h?d: option
-do
+while getopts h?d: option; do
   case "${option}" in
     h)
     help
@@ -55,11 +51,9 @@ do
     delimeterUsed=true
     delimeter=${OPTARG}
     ;;
-  esac
-done
+  esac; done
 
-for curArgIndex in $(seq $#)
-do
+for ((curArgIndex=0;curArgIndex<$#;curArgIndex++)); do
   case "${!curArgIndex+1}" in
     -d)
       if [[ "$curArgIndex" -eq 0 ]]; then
@@ -72,8 +66,7 @@ do
       help
       exit 2
     ;;
-  esac
-done
+  esac; done
 
 if [ "$delimeterUsed" = false ]; then
   spacesInFrom="$(echo "$1" | grep -o ' ' | wc -l )"
