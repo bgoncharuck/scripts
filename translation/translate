@@ -24,16 +24,9 @@ translate()
     ;;
   esac
 
-  case "$delimeter" in
-    "/") for ((curIndex=0;curIndex<"${#fromArray[@]}";curIndex++)); do
-      result="$(echo "$result" | sed -e "s:${fromArray[curIndex]}:${toArray[curIndex]}:g")"
-      done
-    ;;
-    *) for ((curIndex=0;curIndex<"${#fromArray[@]}";curIndex++)); do
-      result="${result//${fromArray[curIndex]}/${toArray[curIndex]}}"
-      done
-    ;;
-  esac
+  for ((curIndex=0;curIndex<"${#fromArray[@]}";curIndex++)); do
+    result="${result//${fromArray[curIndex]}/${toArray[curIndex]}}"
+  done
 
   echo "$result"
 }
@@ -73,7 +66,7 @@ for ((curArgIndex=0;curArgIndex<$#;curArgIndex++)); do
       help
       exit 2
     ;;
-  esac 
+  esac
 done
 
 if [ "$delimeterUsed" = false ]; then
