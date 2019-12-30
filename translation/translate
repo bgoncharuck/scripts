@@ -13,22 +13,23 @@ translate()
 {
   result="$3"
 
-  if [[ "$delimeter" = "" ]]; then
-    result="$(echo "$result" | tr "$1" "$2" )"
-  else
-    IFS="$delimeter" read -ra fromArray <<< "$1"
-    IFS="$delimeter" read -ra toArray <<< "$2"
-    if [[ "$delimeter" != "/" ]]; then
-      for curIndex in $(seq "${#fromArray[@]}")
-      do
-        result="${result//${fromArray[curIndex-1]}/${toArray[curIndex-1]}}"
-      done
+  if [[ "$delimeter" != "/" ]]; then
+    if [[ $delimeter != "" ]]; then
+      IFS="$delimeter" read -ra fromArray <<< "$1"
+      IFS="$delimeter" read -ra toArray <<< "$2"
     else
-      for curIndex in $(seq "${#fromArray[@]}")
-      do
-        result="$(echo "$result" | sed -e "s:${fromArray[curIndex-1]}:${toArray[curIndex-1]}:g")"
-      done
+      fromArray=($(echo "$1"|sed  's/\(.\)/\1 /g'))
+      toArray=($(echo "$2"|sed  's/\(.\)/\1 /g'))
     fi
+    for curIndex in $(seq "${#fromArray[@]}")
+    do
+      result="${result//${fromArray[curIndex-1]}/${toArray[curIndex-1]}}"
+    done
+  else
+    for curIndex in $(seq "${#fromArray[@]}")
+    do
+      result="$(echo "$result" | sed -e "s:${fromArray[curIndex-1]}:${toArray[curIndex-1]}:g")"
+    done
   fi
 
   echo "$result"
