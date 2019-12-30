@@ -14,19 +14,25 @@ translate()
   result="$3"
 
   case "$delimeter" in
-    "")mapfile -t fromArray < <(echo "$1"| grep -o .)
-    mapfile -t toArray < <(echo "$2"| grep -o .);;
-    *)IFS="$delimeter" read -ra fromArray <<< "$1"
-    IFS="$delimeter" read -ra toArray <<< "$2";;
+    "")
+      mapfile -t fromArray < <(echo "$1"| grep -o .)
+      mapfile -t toArray < <(echo "$2"| grep -o .)
+    ;;
+    *)
+      IFS="$delimeter" read -ra fromArray <<< "$1"
+      IFS="$delimeter" read -ra toArray <<< "$2"
+    ;;
   esac
 
   case "$delimeter" in
     "/") for ((curIndex=0;curIndex<"${#fromArray[@]}";curIndex++)); do
       result="$(echo "$result" | sed -e "s:${fromArray[curIndex]}:${toArray[curIndex]}:g")"
-    done;;
+      done
+    ;;
     *) for ((curIndex=0;curIndex<"${#fromArray[@]}";curIndex++)); do
       result="${result//${fromArray[curIndex]}/${toArray[curIndex]}}"
-    done;;
+      done
+    ;;
   esac
 
   echo "$result"
@@ -44,29 +50,31 @@ delimeter=" "
 while getopts h?d: option; do
   case "${option}" in
     h)
-    help
-    exit 0
+      help
+      exit 0
     ;;
     d)
-    delimeterUsed=true
-    delimeter=${OPTARG}
+      delimeterUsed=true
+      delimeter=${OPTARG}
     ;;
-  esac; done
+  esac
+done
 
 for ((curArgIndex=0;curArgIndex<$#;curArgIndex++)); do
   case "${!curArgIndex+1}" in
     -d)
       if [[ "$curArgIndex" -eq 0 ]]; then
-      break; else
-      help
-      exit 2
+        break; else
+        help
+        exit 2
       fi
     ;;
     -*)
       help
       exit 2
     ;;
-  esac; done
+  esac 
+done
 
 if [ "$delimeterUsed" = false ]; then
   spacesInFrom="$(echo "$1" | grep -o ' ' | wc -l )"
