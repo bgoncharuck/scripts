@@ -1,0 +1,10 @@
+#!/bin/bash
+help()
+{
+  echo -e "rangeTranslate \"6\" \"abcde\" \"klfzyz\" \"text\""
+  echo ""
+  echo -e "rangeTranslate \"16\" \"16characters 16characters 16characters\" \"129characters 1character 16characters\" \"text\""
+  echo -e "rangeTranslate \"99\" -d \":\" \"99characters:99characters:99characters\" \"anycharacters:anycharacters:anycharacters\" \"text\""
+}
+
+#@TODO
