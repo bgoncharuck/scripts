@@ -20,15 +20,29 @@ case "$#" in
       exit 2; else exit 0; fi
   ;;
   4)
-
+    if ! [[ "$1" =~ ^[0-9]+$ ]]; then
+      help; exit 2; fi
+    inputString="$4"
   ;;
   6)
-
-  ;;
-  *)
-    help
-    exit 2
+    if [ "$2" != "-d" ] || ! [[ "$1" =~ ^[0-9]+$ ]]; then
+      help; exit 2; fi
+    inputString="$6"
   ;;
 esac
 
 #range
+result=""
+lengthOfInput="${#inputString}"
+
+if [ "$#" -eq 4 ]; then
+  for ((curPos=0; "$curPos" < "$lengthOfInput"; curPos="$curPos"+"$1")); do
+    result="$result$(translate "$2" "$3" "${inputString:curPos:$1}")"
+  done
+else
+  for ((curPos=0; "$curPos" < "$lengthOfInput"; curPos="$curPos"+"$1")); do
+    result="$result$(translate -d "$3" "$4" "$5" "${inputString:curPos:$1}")"
+  done
+fi
+
+echo "$result"
