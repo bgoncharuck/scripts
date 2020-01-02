@@ -7,4 +7,28 @@ help()
   echo -e "rangeTranslate \"99\" -d \":\" \"99characters:99characters:99characters\" \"anycharacters:anycharacters:anycharacters\" \"text\""
 }
 
-#@TODO
+#arguments
+if ! [[ "$#" =~ ^[1,4,6]$ ]]; then
+  help
+  exit 2
+fi
+
+case "$#" in
+  1)
+    help
+    if [ "$1" != "-h" ]; then
+      exit 2; else exit 0; fi
+  ;;
+  4)
+
+  ;;
+  6)
+
+  ;;
+  *)
+    help
+    exit 2
+  ;;
+esac
+
+#range
