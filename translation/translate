@@ -24,7 +24,7 @@ translate()
     ;;
   esac
 
-  for ((curIndex=0;curIndex<"${#fromArray[@]}";curIndex++)); do
+  for ((curIndex=0; curIndex < "${#fromArray[@]}"; curIndex++)); do
     result="${result//${fromArray[curIndex]}/${toArray[curIndex]}}"
   done
 
@@ -53,7 +53,7 @@ while getopts h?d: option; do
   esac
 done
 
-for ((curArgIndex=0;curArgIndex<$#;curArgIndex++)); do
+for ((curArgIndex=0; curArgIndex < $#; curArgIndex++)); do
   case "${!curArgIndex+1}" in
     -d)
       if [[ "$curArgIndex" -eq 0 ]]; then
