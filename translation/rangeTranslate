@@ -7,17 +7,27 @@ help()
   echo -e "rangeTranslate \"99\" -d \":\" \"99characters:99characters:99characters\" \"anycharacters:anycharacters:anycharacters\" \"text\""
 }
 
-delimeter=" "
-
-translate()
+rangeTranslate()
 {
-  result="$3"
-
   IFS="$delimeter" read -ra fromArray <<< "$1"
   IFS="$delimeter" read -ra toArray <<< "$2"
+  declare -A translateMap
 
-  for ((curIndex=0; curIndex < "${#fromArray[@]}"; curIndex++)); do
-    result="${result//${fromArray[curIndex]}/${toArray[curIndex]}}"
+  curIndex=0
+  for from in "${fromArray[@]}"; do
+    translateMap["$from"]="${toArray[curIndex]}"
+    ((curIndex++))
+  done
+
+  lengthOfInput="${#inputString}"
+  result=""
+  for ((curPos=0; "$curPos" < "$lengthOfInput"; curPos="$curPos"+"$range")); do
+
+    currentRange="${inputString:curPos:$range}"
+
+    [[ -z "${translateMap["$currentRange"]+unset}" ]] && currentTranslate="$currentRange" || currentTranslate="${translateMap["$currentRange"]}"
+
+    result="$result$currentTranslate"
   done
 
   echo "$result"
@@ -39,6 +49,7 @@ case "$#" in
     if ! [[ "$1" =~ ^[0-9]+$ ]]; then
       help; exit 2; fi
     inputString="$4"
+    delimeter=" "
   ;;
   6)
     if [ "$2" != "-d" ] || ! [[ "$1" =~ ^[0-9]+$ ]]; then
@@ -47,19 +58,11 @@ case "$#" in
     delimeter="$3"
   ;;
 esac
+range="$1"
 
-#range
-result=""
-lengthOfInput="${#inputString}"
-
+#translate
 if [ "$#" -eq 4 ]; then
-  for ((curPos=0; "$curPos" < "$lengthOfInput"; curPos="$curPos"+"$1")); do
-    result="$result$(translate "$2" "$3" "${inputString:curPos:$1}")"
-  done
+  rangeTranslate "$2" "$3" "$4"
 else
-  for ((curPos=0; "$curPos" < "$lengthOfInput"; curPos="$curPos"+"$1")); do
-    result="$result$(translate "$4" "$5" "${inputString:curPos:$1}")"
-  done
+  rangeTranslate "$4" "$5" "$6"
 fi
-
-echo "$result"
