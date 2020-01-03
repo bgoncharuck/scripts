@@ -1,10 +1,26 @@
 #!/bin/bash
 help()
 {
-  echo -e "rangeTranslate \"6\" \"abcde\" \"klfzyz\" \"text\""
+  echo -e "rangeTranslate \"6\" \"abcde\" \"k\" \"text\""
   echo ""
   echo -e "rangeTranslate \"16\" \"16characters 16characters 16characters\" \"129characters 1character 16characters\" \"text\""
   echo -e "rangeTranslate \"99\" -d \":\" \"99characters:99characters:99characters\" \"anycharacters:anycharacters:anycharacters\" \"text\""
+}
+
+delimeter=" "
+
+translate()
+{
+  result="$3"
+
+  IFS="$delimeter" read -ra fromArray <<< "$1"
+  IFS="$delimeter" read -ra toArray <<< "$2"
+
+  for ((curIndex=0; curIndex < "${#fromArray[@]}"; curIndex++)); do
+    result="${result//${fromArray[curIndex]}/${toArray[curIndex]}}"
+  done
+
+  echo "$result"
 }
 
 #arguments
@@ -28,6 +44,7 @@ case "$#" in
     if [ "$2" != "-d" ] || ! [[ "$1" =~ ^[0-9]+$ ]]; then
       help; exit 2; fi
     inputString="$6"
+    delimeter="$3"
   ;;
 esac
 
@@ -41,7 +58,7 @@ if [ "$#" -eq 4 ]; then
   done
 else
   for ((curPos=0; "$curPos" < "$lengthOfInput"; curPos="$curPos"+"$1")); do
-    result="$result$(translate -d "$3" "$4" "$5" "${inputString:curPos:$1}")"
+    result="$result$(translate "$4" "$5" "${inputString:curPos:$1}")"
   done
 fi
 
