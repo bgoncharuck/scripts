@@ -9,10 +9,12 @@ help()
 
 rangeTranslate()
 {
-  IFS="$delimeter" read -ra fromArray <<< "$1"
-  IFS="$delimeter" read -ra toArray <<< "$2"
+  # split strings into substrings
+  IFS="$delimiter" read -ra fromArray <<< "$1"
+  IFS="$delimiter" read -ra toArray <<< "$2"
   declare -A translateMap
 
+  # create a key-value pairs
   curIndex=0
   for from in "${fromArray[@]}"; do
     translateMap["$from"]="${toArray[curIndex]}"
@@ -25,6 +27,7 @@ rangeTranslate()
 
     currentRange="${inputString:curPos:$range}"
 
+    # replace current range as a key with value from translateMap if key exists
     [[ -z "${translateMap["$currentRange"]+unset}" ]] && currentTranslate="$currentRange" || currentTranslate="${translateMap["$currentRange"]}"
 
     result="$result$currentTranslate"
@@ -49,13 +52,13 @@ case "$#" in
     if ! [[ "$1" =~ ^[0-9]+$ ]]; then
       help; exit 2; fi
     inputString="$4"
-    delimeter=" "
+    delimiter=" "
   ;;
   6)
     if [ "$2" != "-d" ] || ! [[ "$1" =~ ^[0-9]+$ ]]; then
       help; exit 2; fi
     inputString="$6"
-    delimeter="$3"
+    delimiter="$3"
   ;;
 esac
 range="$1"

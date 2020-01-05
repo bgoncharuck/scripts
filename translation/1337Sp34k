@@ -14,5 +14,5 @@ tranlate()
 
 if [ "$#" -lt 2 ] || ! [[ "$1" =~ ^(-f|-t)$ ]]; then help; exit 2; fi
 
-if [ "$1" == "-t" ]; then tranlate "$2" "aeiou" "4310_" | cat;
-else tranlate "$2" "4310_" "aeiou" | cat; fi
+if [ "$1" == "-t" ]; then tranlate "$2" "aeiou" "4310_";
+else tranlate "$2" "4310_" "aeiou"; fi
