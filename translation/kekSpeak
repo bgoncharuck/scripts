@@ -5,13 +5,25 @@ help()
   echo -e "kekSpeak -t \"translate to kekSpeak text\""
 }
 
-tranlate()
-{
-
-
-}
-
 if [ "$#" -lt 2 ] || ! [[ "$1" =~ ^(-f|-t)$ ]]; then help; exit 2; fi
 
-if [ "$1" == "-t" ]; then tranlate "$2" "aeiou" "4310_";
-else tranlate "$2" "4310_" "aeiou"; fi
+fromPatternString=""
+toPatternString=""
+
+if [ "$1" == "-t" ]; then
+  fromPatternString="q w e r t y u i o p [ ] a s d f g h j k l ; ' z x c v b n m , ."
+  toPatternString="й ц у к е н г ш щ з х ї ф і в а п р о л д ж є я ч с м и т ь б ю";
+else
+  fromPatternString="й ц у к е н г ш щ з х ї ф і в а п р о л д ж є я ч с м и т ь б ю"
+  toPatternString="q w e r t y u i o p [ ] a s d f g h j k l ; ' z x c v b n m , ."; fi
+
+result="$2"
+
+while [ -n "$fromPatternString" ] && [ -n "$toPatternString" ]; do
+  IFS=" " read -r fromC fromPatternString <<<"$fromPatternString"
+  IFS=" " read -r toC toPatternString <<<"$toPatternString"
+
+  result="${result//$fromC/$toC}"
+done
+
+echo "$result"
