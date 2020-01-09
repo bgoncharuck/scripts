@@ -1,13 +1,14 @@
 #!/bin/bash
 help()
 {
-  echo -e "1337sp34k -f \"translate from 1337sp34k text\""
-  echo -e "1337sp34k -t \"translate to 1337sp34k text\""
+  echo -e "kekSpeak -f \"translate from kekSpeak text\""
+  echo -e "kekSpeak -t \"translate to kekSpeak text\""
 }
 
 tranlate()
 {
-  echo "$1" | tr "$2" "$3"
+
+
 }
 
 if [ "$#" -lt 2 ] || ! [[ "$1" =~ ^(-f|-t)$ ]]; then help; exit 2; fi
