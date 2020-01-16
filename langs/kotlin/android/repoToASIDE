@@ -24,3 +24,7 @@ syncByName()
 
   rsync -avu --delete "$pathToRepository" "$pathToAndroidStudioProject"
 }
+
+for curRepo in "$@"; do
+  syncByName "$curRepo"
+done
