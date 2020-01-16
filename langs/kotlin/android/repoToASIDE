@@ -1,0 +1,23 @@
+#!/bin/bash
+# repository and android studio ide project sync
+
+if [ -f "./repoToASIDE.$1.conf" ]; then
+  currentConfig="$(cat "./repoToASIDE.$1.conf")"
+  pathToAndroidStudioProject="${currentConfig%.*}"
+  pathToRepository="${currentConfig%*.}"
+else
+  pathToAndroidStudioProject=""
+  while [ -d "$pathToAndroidStudioProject" ]; do
+    echo "Enter a path to Android Studio projects:"
+    read -r pathToAndroidStudioProject
+  done
+  pathToRepository=""
+  while [ -d "$pathToRepository" ]; do
+    echo "Enter a path to Android Studio projects:"
+    read -r pathToRepository
+  done
+  touch ./repoToASIDE.current
+  echo "$pathToAndroidStudioProject.$pathToRepository" > "./repoToASIDE.$1.conf"
+fi
+
+# @TODO
