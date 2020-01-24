@@ -1,0 +1,5 @@
+#!/bin/bash
+git add -A
+git commit -m "$1"
+if [ "$#" -eq 2 ] && [ "$2" = "+" ]; then
+  git push; fi
