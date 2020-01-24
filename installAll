@@ -1,0 +1,28 @@
+sudo echo "We need your password, my Lord."
+
+chmod +x translation/1337Sp34k
+sudo cp translation/1337Sp34k /usr/bin/
+
+chmod +x translation/kekSpeak
+sudo cp translation/kekSpeak /usr/bin/
+
+chmod +x translation/rangeTranslate
+sudo cp translation/rangeTranslate /usr/bin/
+
+chmod +x translation/translate
+sudo cp translation/translate /usr/bin/
+
+chmod +x scriptCommit/ttag
+sudo cp scriptCommit/ttag /usr/bin/
+
+chmod +x scriptCommit/gmmt
+sudo cp scriptCommit/gmmt /usr/bin/
+
+# chmod +x langs/kotlin/kinstall
+# sudo cp langs/kotlin/kinstall /usr/bin/
+
+chmod +x langs/kotlin/krun
+sudo cp langs/kotlin/krun /usr/bin/
+
+chmod +x langs/kotlin/android/repoToASIDE
+sudo cp langs/kotlin/android/repoToASIDE /usr/bin/
