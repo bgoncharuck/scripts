@@ -1,0 +1,8 @@
+#!/bin/bash
+
+clickAndFetch()
+{
+# @TODO
+}
+
+clickAndFetch "https://github.com/bgoncharuck/scripts"
