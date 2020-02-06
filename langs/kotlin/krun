@@ -3,4 +3,4 @@
 # runs it if needed
 jarName="${1//.kt/.jar}"
 kotlinc "$1" -include-runtime -d "$jarName"
-if [ "$2" = "run" ]; then java -jar "$jarName"; fi
+if [ "$2" = "+" ]; then java -jar "$jarName"; fi
