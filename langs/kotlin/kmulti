@@ -1,0 +1,4 @@
+#!/bin/bash
+#compiles all needed .kt files as one jar
+jarName="$(basename "$PWD").jar"
+kotlinc "$@" -include-runtime -d "$jarName"
