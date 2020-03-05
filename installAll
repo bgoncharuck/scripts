@@ -24,5 +24,11 @@ sudo cp scriptCommit/gmmt /usr/bin/
 chmod +x langs/kotlin/krun
 sudo cp langs/kotlin/krun /usr/bin/
 
+chmod +x langs/kotlin/kmrun
+sudo cp langs/kotlin/krun /usr/bin/
+
+chmod +x langs/kotlin/kmulti
+sudo cp langs/kotlin/krun /usr/bin/
+
 chmod +x langs/kotlin/android/repoToASIDE
 sudo cp langs/kotlin/android/repoToASIDE /usr/bin/
