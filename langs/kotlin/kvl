@@ -1,0 +1,8 @@
+#!/bin/bash
+# "very very lazy" kotlin multi run "very very lazy"
+kmrun() {
+  jarName="$(basename "$PWD").jar"
+  kotlinc "$@" -include-runtime -d "$jarName"
+  java -jar "$jarName"
+}
+kmrun *.kt */*.kt
