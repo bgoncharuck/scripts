@@ -1,8 +1,10 @@
 #!/bin/bash
-# "very very lazy" kotlin multi run "very very lazy"
+# "very very lazy" kotlin multi run 
 kmrun() {
   jarName="$(basename "$PWD").jar"
   kotlinc "$@" -include-runtime -d "$jarName"
   java -jar "$jarName"
 }
-kmrun *.kt */*.kt
+if [ "$1" = "extra" ]; then
+  watch -n 3 kmrun ./*.kt ./*/*.kt; else
+kmrun ./*.kt ./*/*.kt; fi
