@@ -4,4 +4,4 @@ filename=""
 from=""
 to=""
 
-java -jar "$app" build-apks --bundle="$from$filename" --output="$to$filename"
+java -jar "$app" build-apks --bundle="$from$filename.aab" --output="$to$filename.apks"
