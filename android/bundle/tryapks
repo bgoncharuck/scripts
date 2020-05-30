@@ -1,0 +1,6 @@
+#!/bin/bash
+app=""
+filename=""
+path=""
+
+java -jar "$app" install-apks --apks="$path$filename.apks"
