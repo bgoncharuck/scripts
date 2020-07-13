@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# chmod +x ./multi_pub_get.sh
+# 1. chmod +x ./multi_pub_get.sh
+# 2. ./multi_pub_get.sh
+# 3. restart your IDE
 
 recursivePubGet () {
 for D in *; do
