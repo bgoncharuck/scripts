@@ -1,6 +1,6 @@
 #!/bin/bash
 
-currentYear="2020"
+currentYear="2021"
 
 dateToFormat() {
   time="$(date +%H:%M)"
