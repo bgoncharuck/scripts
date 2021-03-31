@@ -54,3 +54,5 @@ csv="${csv//\"/\\\"}"
 # add to the file
 toAdd="${dartFile/];/\"$csv\",];}"
 echo "$toAdd" > "$2"
+
+echo "Predictions are added to $2"
