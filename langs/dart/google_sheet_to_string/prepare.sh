@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # HOW-To
-# prepare "PATH_TO_CSV" "PATH_TO_PREDICTIONS_FILE"
+# prepare "PATH_TO_CSV" "PATH_TO_DART_FILE"
 # PATH_TO_CSV - csv file with new predictions
-# PATH_TO_PREDICTIONS_FILE - file with predictions bytedata for needed locale
+# PATH_TO_DART_FILE - file with bytedata for needed List of Strings
 # exmple:
-# prepare "some_csv.csv" "english/prediction.dart"
+# prepare "some_csv.csv" "english/locale.dart"
 
 # check arguments
 if ! [[ "$#" =~ ^[2]$ ]]; then
@@ -34,7 +34,7 @@ else
     exit 1
 fi
 
-if grep -q 'List<String> _predictions' "$2"; then
+if grep -q 'List<String>' "$2"; then
     echo "second file is correct"
 else
     echo "second file is not correct"
@@ -55,4 +55,4 @@ csv="${csv//\"/\\\"}"
 toAdd="${dartFile/];/\"$csv\",];}"
 echo "$toAdd" > "$2"
 
-echo "Predictions are added to $2"
+echo "CSV are added to $2"
