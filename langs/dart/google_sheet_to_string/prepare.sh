@@ -43,27 +43,20 @@ fi
 
 
 # read files
-
-# Mac OS
 csv=$(cat "$1" | sed -e 's/$/\$/' | tr -d '\r\n' )
 dartFile=$(cat "$dartPath")
 
+# resolve google sheet author copypaste flood
+csv="${csv//$\"/$}"
+
 # replace end of line with control characters
 csv="${csv//$/\r\n}"
-
-# Linux
-# csv=$(cat -E "$1" | tr -d '\r\n' )
-# dartFile=$(cat "$dartPath")
-
-# # replace end of line with control characters
-# csv="${csv//$/\\\r\\\n}"
-
 
 # replace " with control "
 csv="${csv//\"/\\\"}"
 
 # add to the file
-toAdd="${dartFile/];/\"$csv\",];}"
+toAdd="${dartFile/];/\"$csv\",$'\n'//$'\n'];}"
 echo "$toAdd" > "$2"
 
 echo "CSV are added to $2"
