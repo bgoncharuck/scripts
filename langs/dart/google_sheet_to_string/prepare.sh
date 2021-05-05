@@ -50,7 +50,10 @@ dartFile=$(cat "$dartPath")
 csv="${csv//$\"/$}"
 
 # replace end of line with control characters
+# Mac OS
 csv="${csv//$/\r\n}"
+# GNU core utils
+# csv="${csv//$/\\\r\\\n}"
 
 # replace " with control "
 csv="${csv//\"/\\\"}"
