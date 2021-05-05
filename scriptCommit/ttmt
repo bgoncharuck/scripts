@@ -8,7 +8,7 @@ dateToFormat() {
   if [ $(tr -dc '/' <<<"$1" | wc -c) -eq 2 ]; then
     year="20${arr[2]}"; else year="$currentYear"; fi
 
-  date --date="${arr[1]}/${arr[0]}/$year" "+%a %b %d $time %Y +0300"
+  gdate --date="${arr[1]}/${arr[0]}/$year" "+%a %b %d $time %Y +0300"
 }
 
 git add -A
