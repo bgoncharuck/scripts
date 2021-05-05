@@ -46,10 +46,6 @@ fi
 csv=$(cat "$1" | sed -e 's/$/\$/' | tr -d '\r\n' )
 dartFile=$(cat "$dartPath")
 
-# resolve google sheet author copypaste flood
-csv="${csv//$\",/\",}"
-csv="${csv//$\"$/\"$}"
-
 # replace end of line with control characters
 # Mac OS
 csv="${csv//$/\r\n}"
