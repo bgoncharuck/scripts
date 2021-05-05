@@ -43,11 +43,22 @@ fi
 
 
 # read files
-csv=$(cat -E "$1" | tr -d '\r\n')
-dartFile=$(cat "$2")
+
+# Mac OS
+csv=$(cat "$1" | sed -e 's/$/\$/' | tr -d '\r\n' )
+dartFile=$(cat "$dartPath")
 
 # replace end of line with control characters
-csv="${csv//$/\\\r\\\n}"
+csv="${csv//$/\r\n}"
+
+# Linux
+# csv=$(cat -E "$1" | tr -d '\r\n' )
+# dartFile=$(cat "$dartPath")
+
+# # replace end of line with control characters
+# csv="${csv//$/\\\r\\\n}"
+
+
 # replace " with control "
 csv="${csv//\"/\\\"}"
 
