@@ -6,8 +6,8 @@
         <string>com.removefuckingmrt.app</string>
         <key>ProgramArguments</key>
         <array>
-			<string>/bin/sh</string>
-			<string>/Library/Apple/System/Library/CoreServices/removemrt.sh</string>
+		<string>/bin/sh</string>
+		<string>/Library/Apple/System/Library/CoreServices/removemrt.sh</string>
         </array>
         <key>RunAtLoad</key>
         <true/>
