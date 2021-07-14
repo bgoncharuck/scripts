@@ -3,7 +3,7 @@
 <plist version="1.0">
     <dict>
         <key>Label</key>
-        <string>removefuckingmrt</string>
+        <string>com.removefuckingmrt.app</string>
         <key>ProgramArguments</key>
         <array>
 			<string>/bin/sh</string>
