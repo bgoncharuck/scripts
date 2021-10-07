@@ -1,0 +1,5 @@
+#!/bin/bash
+if [ "$#" -lt 2 ]; then exit "1"; fi
+if [[ $2 != *.zip ]]; then exit "1"; fi
+# $1 is first argument and file name
+zip -r "$@"
