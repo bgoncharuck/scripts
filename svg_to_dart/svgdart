@@ -1,0 +1,36 @@
+#!/bin/bash
+
+    file="$1"
+    output_folder="$2"
+
+    # Read and URL-encode SVG content
+    svg_content=$(cat "$file" | tr '\n' '\r' | sed 's/\r/\\n/g' | sed 's/"/\\"/g')
+
+    # Construct JSON payload with the modified SVG content and the "responsive" field
+    payload="{\"svg_data\": \"$svg_content\", \"responsive\": true}"
+
+    # filenames
+    filename=$(basename "$file")
+    filename_without_ext="${filename%.*}"
+    output_file="$output_folder/$filename_without_ext.dart"
+
+
+    # Make cURL request with JSON payload and save the response
+    response=$(curl "https://us-central1-flutter-shapemaker.cloudfunctions.net/webRequest/cpGenerator" \
+    -H POST \
+    -H "Content-Type: text/plain;charset=UTF-8" \
+    -H "Accept: */*" \
+    -d "$payload" -s)
+    data=$(echo "$response" | jq -r '.data')
+
+    # correct .dart file
+    modified_data=$(echo "$data" | sed 's/\\n/\n/g' |\
+    sed "s,RPSCustomPainter,"$filename_without_ext"FlagPainter,g" |\
+    sed "s/Color/const Color/g" |\
+    sed "s/.withOpacity(1.0)//g" |\
+    sed "s,import 'dart:ui' as ui;,// ignore_for_file: non_constant_identifier_names\nimport 'package:flutter/rendering.dart';," |\
+    sed "4,10d")
+
+    # write file
+    echo -e "$modified_data" > "$output_file"
+    # echo "Response saved as: $output_file"
