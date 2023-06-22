@@ -60,6 +60,6 @@ fi
 # Iterate over SVG files in the folder
 for file in "$folder_path"/*.svg; do
   if [ -f "$file" ]; then
-    $(svg_to_dart "$file" "$output_folder")
+    svg_to_dart "$file" "$output_folder"
   fi
 done
