@@ -28,6 +28,7 @@ svg_to_dart() {
     modified_data=$(echo "$data" | sed 's/\\n/\n/g' |\
     sed "s,RPSCustomPainter,"$filename_without_ext"Painter,g" |\
     sed "s/Color/const Color/g" |\
+    sed "s/return true;/return false;/g" |\
     sed "s/.withOpacity(1.0)//g" |\
     sed "s,import 'dart:ui' as ui;,// ignore_for_file: non_constant_identifier_names\nimport 'package:flutter/rendering.dart';," |\
     sed "4,10d")
