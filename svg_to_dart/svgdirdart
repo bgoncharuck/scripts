@@ -17,7 +17,7 @@ svg_to_dart() {
 
     # modify file
     # change to camel case
-    class_name=$(perl -pe 's#(_|^)(.)#\u$2#g' <<<"$filename_without_ext")
+    class_name=$(perl -pe 's#(_|^)(.)#\u$2#g' <<<"$filename_without_ext"_painter)
 
 
     # Make cURL request with JSON payload and save the response
