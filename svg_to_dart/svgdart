@@ -16,7 +16,7 @@
 
     # modify file
     # TODO change to camel case
-    class_name="$filename_without_ext"FlagPainter
+    class_name="$filename_without_ext"
 
 
     # Make cURL request with JSON payload and save the response
