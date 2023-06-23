@@ -31,10 +31,10 @@
     modified_data=$(echo "$data" | sed 's/\\n/\n/g' |\
     sed "s,RPSCustomPainter,"$class_name",g" |\
     sed "s,CustomPainter {,CustomPainter {\nconst "$class_name"();\n,g" |\
-    sed "s/Color/const Color/g" |\
+    sed "s/Color(/const Color(/g" |\
     sed "s/return true;/return false;/g" |\
     sed "s/.withOpacity(1.0)//g" |\
-    sed "s|import 'dart:ui' as ui;|// ignore_for_file: non_constant_identifier_names, camel_case_types, unused_import\nimport 'dart:ui' as ui;\nimport 'package:flutter/rendering.dart';|" |\
+    sed "s|import 'dart:ui' as ui;|// ignore_for_file: non_constant_identifier_names, camel_case_types, unused_import\nimport 'dart:ui' as ui;\nimport 'package:flutter/material.dart';|" |\
     sed "5,11d")
 
     # write file
