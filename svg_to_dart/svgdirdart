@@ -33,7 +33,7 @@ svg_to_dart() {
     sed "s,RPSCustomPainter,"$class_name",g" |\
     sed "s,CustomPainter {,CustomPainter {\nconst "$class_name"();\n,g" |\
     sed "s/Color(/const Color(/g" |\
-    sed "s/.gray/.grey(/g" |\
+    sed "s/.gray/.grey/g" |\
     sed "s/return true;/return false;/g" |\
     sed "s/.withOpacity(1.0)//g" |\
     sed "s|import 'dart:ui' as ui;|// ignore_for_file: non_constant_identifier_names, camel_case_types, unused_import\nimport 'dart:ui' as ui;\nimport 'package:flutter/material.dart';|" |\
