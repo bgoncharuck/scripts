@@ -33,6 +33,8 @@
     sed "s,CustomPainter {,CustomPainter {\nconst "$class_name"();\n,g" |\
     sed "s/Color(/const Color(/g" |\
     sed "s/.gray/.grey/g" |\
+    sed "s/Colors.gold/const Color(0xffFFCE30)/g" |\
+    sed "s/Colors.silver/const Color(0xffB8B8B8)/g" |\
     sed "s/return true;/return false;/g" |\
     sed "s/.withOpacity(1.0)//g" |\
     sed "s|import 'dart:ui' as ui;|// ignore_for_file: non_constant_identifier_names, camel_case_types, unused_import\nimport 'dart:ui' as ui;\nimport 'package:flutter/material.dart';|" |\
