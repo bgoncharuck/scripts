@@ -15,6 +15,7 @@ ADDITIONAL_ARGS=("$@")
 # Initialize TOOL_ARGS with any provided additional arguments
 TOOL_ARGS=()
 for arg in "${ADDITIONAL_ARGS[@]}"; do
+  # Assuming additional args are already in the correct --define format or don't need --define
   TOOL_ARGS+=("\"$arg\"")
 done
 
@@ -22,12 +23,12 @@ done
 CLI_DEFINES=("${ADDITIONAL_ARGS[@]}")
 
 
-# Build dart-define args from .env and append to TOOL_ARGS
+# Build --define args from .env and append to TOOL_ARGS
 while IFS='=' read -r key value; do
   # Skip comments, empty lines, and lines without a value
   [[ "$key" =~ ^#.*$ || -z "$key" || -z "$value" ]] && continue
-  TOOL_ARGS+=("\"--dart-define\"")
-  TOOL_ARGS+=("\"${key}=${value}\"")
+  
+  TOOL_ARGS+=("\"--dart-define=${key}=${value}\"")
   CLI_DEFINES+=("--dart-define=${key}=${value}")
 done < "$ENV_FILE"
 
@@ -73,9 +74,9 @@ awk -v toolargs_formatted="$TOOL_ARGS_FORMATTED" '
   }
 ' "$LAUNCH_FILE" > "$TEMP_FILE" && mv "$TEMP_FILE" "$LAUNCH_FILE"
 
-echo "Updated launch.json with dart-defines from .env and additional arguments"
+echo "Updated launch.json with defines from .env and additional arguments"
 
-# Print CLI version of dart-define flags
+# Print CLI version of define flags
 echo ""
 echo "Copy-paste into flutter build/run:"
 echo "${CLI_DEFINES[*]}"
