@@ -1,0 +1,118 @@
+#!/bin/bash
+# Usage: azuflutterdir
+# Run from a Flutter project root (directory containing pubspec.yaml).
+# Replaces pubspec.yaml while preserving name, description, version, and publish_to;
+# removes test/; creates lib layout, assets/image, assets/fonts; copies analysis_options.
+
+set -euo pipefail
+
+_script_resolve() {
+  local src="${BASH_SOURCE[0]}"
+  while [[ -h "$src" ]]; do
+    local dir
+    dir="$(cd -P "$(dirname "$src")" && pwd)"
+    src="$(readlink "$src")"
+    [[ "$src" != /* ]] && src="$dir/$src"
+  done
+  printf '%s' "$(cd -P "$(dirname "$src")" && pwd)"
+}
+
+SCRIPT_DIR="$(_script_resolve)"
+TEMPLATE="$SCRIPT_DIR/azuflutterdir_template"
+ANALYSIS_SRC="$SCRIPT_DIR/azudartdir_template/analysis_options.yaml"
+
+if [[ ! -d "$TEMPLATE/lib" || ! -f "$ANALYSIS_SRC" ]]; then
+  echo "azuflutterdir: missing template under $SCRIPT_DIR" >&2
+  exit 1
+fi
+
+ruby <<'RUBY'
+require "yaml"
+
+abort "azuflutterdir: pubspec.yaml not found in #{Dir.pwd}" unless File.file?("pubspec.yaml")
+
+old = YAML.load_file("pubspec.yaml")
+name = old["name"]
+abort "azuflutterdir: pubspec missing name" unless name
+
+def esc_yaml_string(s)
+  s = s.to_s.gsub("\r\n", "\n")
+  if s.include?("\n")
+    abort "azuflutterdir: multiline description is not supported; shorten pubspec description"
+  end
+  if s.match?(/['"]|:\s|^\s|\s$|[#\[\]{}*,&!|>%@]/) || s.empty?
+    '"' + s.gsub("\\", "\\\\").gsub('"', '\\"') + '"'
+  else
+    s
+  end
+end
+
+desc = old.fetch("description", "")
+ver = old.fetch("version", "1.0.0+1")
+pt = old["publish_to"]
+
+lines = []
+lines << "name: #{esc_yaml_string(name)}"
+lines << "description: #{esc_yaml_string(desc)}"
+lines << "publish_to: #{esc_yaml_string(pt)}" if pt
+lines << "version: #{esc_yaml_string(ver)}"
+lines << ""
+lines << "environment:"
+lines << "  sdk: ^3.10.0"
+lines << ""
+lines << "dependencies:"
+lines << "  flutter:"
+lines << "    sdk: flutter"
+lines << "  flutter_native_splash: ^2.4.7"
+lines << "  url_launcher: ^6.3.2"
+lines << ""
+lines << "dev_dependencies:"
+lines << "  flutter_lints: ^6.0.0"
+lines << "  very_good_analysis: ^10.1.0"
+lines << ""
+lines << "flutter:"
+lines << "  uses-material-design: false"
+lines << "  assets:"
+lines << "  - assets/image/"
+lines << "  # fonts:"
+lines << "  #   - family: Kanit"
+lines << "  #     fonts:"
+lines << "  #       - asset: assets/fonts/Kanit-Regular.ttf"
+lines << "  #         weight: 400"
+lines << ""
+lines << "# dart run flutter_native_splash:create"
+lines << "flutter_native_splash:"
+lines << "  background_image: splash.jpg"
+
+File.write("pubspec.yaml", lines.join("\n") + "\n")
+RUBY
+
+rm -rf test
+
+mkdir -p assets/image assets/fonts
+mkdir -p lib/core/init lib/core/interface/screen_module lib/core/routing
+mkdir -p lib/data/entity lib/data/service
+mkdir -p lib/logic/controller lib/logic/use_case
+mkdir -p lib/ui/common/image
+
+escape_sed() {
+  printf '%s' "$1" | sed -e 's/[\/&]/\\&/g'
+}
+PKG_ESC="$(escape_sed "$(
+  ruby -e 'require "yaml"; print YAML.load_file("pubspec.yaml")["name"]'
+)")"
+
+copy_tree() {
+  local src="$1" dest="$2"
+  while IFS= read -r -d '' f; do
+    local rel="${f#$src/}"
+    mkdir -p "$(dirname "$dest/$rel")"
+    sed "s/{{PACKAGE_NAME}}/${PKG_ESC}/g" "$f" >"$dest/$rel"
+  done < <(find "$src" -type f -name '*.dart' -print0)
+}
+
+copy_tree "$TEMPLATE/lib" lib
+
+cp "$ANALYSIS_SRC" analysis_options.yaml
+
+echo "azuflutterdir: updated $PWD (pubspec, analysis_options, lib/, assets/image, assets/fonts; removed test/)"

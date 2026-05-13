@@ -1,11 +1,11 @@
 #!/bin/bash
-# Usage: fastdartdir PACKAGE_NAME
-# Creates ./PACKAGE_NAME in the current working directory using template/ next to this script.
+# Usage: azudartdir PACKAGE_NAME
+# Creates ./PACKAGE_NAME in the current working directory using azudartdir_template/ next to this script.
 
 set -euo pipefail
 
 usage() {
-  echo "Usage: fastdartdir PACKAGE_NAME" >&2
+  echo "Usage: azudartdir PACKAGE_NAME" >&2
   exit 1
 }
 
@@ -13,7 +13,7 @@ usage() {
 NAME="$1"
 
 if [[ ! "$NAME" =~ ^[a-z][a-z0-9_]*$ ]]; then
-  echo "fastdartdir: invalid package name (use lowercase letters, digits, underscores; start with a letter)" >&2
+  echo "azudartdir: invalid package name (use lowercase letters, digits, underscores; start with a letter)" >&2
   exit 1
 fi
 
@@ -29,15 +29,15 @@ _script_resolve() {
 }
 
 SCRIPT_DIR="$(_script_resolve)"
-TEMPLATE="$SCRIPT_DIR/template"
+TEMPLATE="$SCRIPT_DIR/azudartdir_template"
 
 if [[ ! -f "$TEMPLATE/pubspec.yaml" || ! -f "$TEMPLATE/analysis_options.yaml" || ! -f "$TEMPLATE/lib/main.dart" ]]; then
-  echo "fastdartdir: missing template under $TEMPLATE" >&2
+  echo "azudartdir: missing template under $TEMPLATE" >&2
   exit 1
 fi
 
 if [[ -e "$NAME" ]]; then
-  echo "fastdartdir: path already exists: $PWD/$NAME" >&2
+  echo "azudartdir: path already exists: $PWD/$NAME" >&2
   exit 1
 fi
 
