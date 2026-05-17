@@ -4,6 +4,8 @@ analyzer:
     lines_longer_than_80_chars: ignore
     avoid_redundant_argument_values: ignore
     flutter_style_todos: ignore
+    avoid_print: ignore
+    cascade_invocations: ignore
   exclude:
     - '**/*.g.dart'
     - '**/*.freezed.dart'
@@ -14,6 +16,7 @@ linter:
     dangling_library_doc_comments: false
     always_use_package_imports: false
     public_member_api_docs: false
+    sort_constructors_first: false
     sort_pub_dependencies: false
     document_ignores: false
     avoid_catches_without_on_clauses: false
