@@ -1,4 +1,4 @@
-import 'package:{{PACKAGE_NAME}}/logic/use_case/i_use_case.dart';
+import 'package:{{PACKAGE_NAME}}/core/interface/i_use_case.dart';
 import 'package:flutter/foundation.dart';
 import 'package:url_launcher/url_launcher.dart';
 

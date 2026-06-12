@@ -64,6 +64,8 @@ lines << "dependencies:"
 lines << "  flutter:"
 lines << "    sdk: flutter"
 lines << "  flutter_native_splash: ^2.4.7"
+lines << "  go_router: ^17.2.3"
+lines << "  get_it: ^9.2.1"
 lines << "  url_launcher: ^6.3.2"
 lines << ""
 lines << "dev_dependencies:"
@@ -90,7 +92,7 @@ RUBY
 rm -rf test
 
 mkdir -p assets/image assets/fonts
-mkdir -p lib/core/init lib/core/interface/screen_module lib/core/routing
+mkdir -p lib/core/init lib/core/interface/screen_module lib/data/service/logger/plugins lib/core/routing
 mkdir -p lib/data/entity lib/data/service
 mkdir -p lib/logic/controller lib/logic/use_case
 mkdir -p lib/ui/common/image
